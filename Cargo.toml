@@ -1,0 +1,22 @@
+[package]
+name = "antic"
+description = "wrapper for the antic C library for algebraic number theory"
+version = "0.1.0"
+authors = ["Kaashif Hymabaccus <kaashif@kaashif.co.uk>"]
+license = "LGPL-3.0-only"
+edition = "2018"
+categories = ["mathematics"]
+homepage = "https://github.com/CyclotomicFields/antic-rs"
+repository = "https://github.com/CyclotomicFields/antic-rs"
+readme = "README.md"
+
+[dependencies]
+libc = "0.2"
+rand = "0.7.3"
+
+[build-dependencies]
+cc = { version = "1.0", features = ["parallel"] }
+pkg-config = "0.3"
+
+[[bin]]
+name = "anticbench"
