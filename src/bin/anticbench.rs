@@ -4,13 +4,13 @@ use std::mem::MaybeUninit;
 use std::time::Instant;
 
 fn main() {
-    const n: i64 = 100;
-    const num_tests: usize = 1000;
+    let n: i64 = 100;
+    let num_tests: usize = 1000;
 
     eprintln!("n = {}", n);
     eprintln!("num_tests = {}", num_tests);
 
-    const num_per_test: usize = 6;
+    let num_per_test: usize = 6;
     let max_num_terms: usize = 5;
 
     unsafe {
@@ -28,15 +28,17 @@ fn main() {
         let cyclotomic_field_n = cyclotomic_field_n_mem.as_mut_ptr();
         nf_init(cyclotomic_field_n, cyclotomic_polynomial_n);
 
-        let mut nums: [[MaybeUninit<nf_elem_struct>; num_per_test]; num_tests] =
-            MaybeUninit::uninit().assume_init();
+        // "initialise" the uninitialised memory
+        let mut nums: Vec<Vec<MaybeUninit<nf_elem_struct>>> = vec![];
 
         let mut rng = rand::thread_rng();
 
         eprintln!("generating test data");
         for i in 0..num_tests {
+            nums.push(vec![]);
             for j in 0..num_per_test {
-                let num: *mut nf_elem_struct = nums[i][j].as_mut_ptr();
+                let mut num_mem: MaybeUninit<nf_elem_struct> = MaybeUninit::uninit();
+                let num: *mut nf_elem_struct = num_mem.as_mut_ptr();
                 nf_elem_init(num, cyclotomic_field_n);
                 let num_terms = rng.gen_range(1, max_num_terms);
 
@@ -69,6 +71,7 @@ fn main() {
 
                     nf_elem_set(num, sum, cyclotomic_field_n);
                 }
+                nums[i].push(num_mem);
             }
         }
 
@@ -77,24 +80,39 @@ fn main() {
         let start = Instant::now();
 
         for i in 0..num_tests {
-            let mut chunk = nums[i];
+            let mut chunk = nums[i].clone();
             let mut prod1_mem: MaybeUninit<nf_elem_struct> = MaybeUninit::uninit();
             let prod1 = prod1_mem.as_mut_ptr();
             nf_elem_init(prod1, cyclotomic_field_n);
             fmpq_poly_fit_length((*prod1).elem.as_mut_ptr(), 2 * n);
-            nf_elem_mul(prod1, chunk[0].as_mut_ptr(), chunk[1].as_mut_ptr(), cyclotomic_field_n);
+            nf_elem_mul(
+                prod1,
+                chunk[0].as_mut_ptr(),
+                chunk[1].as_mut_ptr(),
+                cyclotomic_field_n,
+            );
 
             let mut prod2_mem: MaybeUninit<nf_elem_struct> = MaybeUninit::uninit();
             let prod2 = prod2_mem.as_mut_ptr();
             nf_elem_init(prod2, cyclotomic_field_n);
             fmpq_poly_fit_length((*prod2).elem.as_mut_ptr(), 2 * n);
-            nf_elem_mul(prod2, chunk[2].as_mut_ptr(), chunk[3].as_mut_ptr(), cyclotomic_field_n);
+            nf_elem_mul(
+                prod2,
+                chunk[2].as_mut_ptr(),
+                chunk[3].as_mut_ptr(),
+                cyclotomic_field_n,
+            );
 
             let mut prod3_mem: MaybeUninit<nf_elem_struct> = MaybeUninit::uninit();
             let prod3 = prod3_mem.as_mut_ptr();
             nf_elem_init(prod3, cyclotomic_field_n);
             fmpq_poly_fit_length((*prod3).elem.as_mut_ptr(), 2 * n);
-            nf_elem_mul(prod3, chunk[4].as_mut_ptr(), chunk[5].as_mut_ptr(), cyclotomic_field_n);
+            nf_elem_mul(
+                prod3,
+                chunk[4].as_mut_ptr(),
+                chunk[5].as_mut_ptr(),
+                cyclotomic_field_n,
+            );
 
             let mut sum1_mem: MaybeUninit<nf_elem_struct> = MaybeUninit::uninit();
             let sum1 = sum1_mem.as_mut_ptr();
