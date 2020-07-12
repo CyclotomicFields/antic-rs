@@ -23645,11 +23645,6 @@ extern "C" {
 extern "C" {
     pub static mut signgam: ::std::os::raw::c_int;
 }
-pub const FP_NAN: _bindgen_ty_21 = 0;
-pub const FP_INFINITE: _bindgen_ty_21 = 1;
-pub const FP_ZERO: _bindgen_ty_21 = 2;
-pub const FP_SUBNORMAL: _bindgen_ty_21 = 3;
-pub const FP_NORMAL: _bindgen_ty_21 = 4;
 pub type _bindgen_ty_21 = u32;
 extern "C" {
     pub fn d_randtest(state: *mut flint_rand_s) -> f64;
