@@ -10214,6 +10214,7 @@ extern "C" {
 extern "C" {
     pub fn n_root(n: mp_limb_t, root: mp_limb_t) -> mp_limb_t;
 }
+#[doc = " ECM functions"]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct n_ecm_s {
@@ -14358,6 +14359,45 @@ fn bindgen_test_layout_fmpq() {
 }
 pub type fmpq_t = [fmpq; 1usize];
 extern "C" {
+    pub fn fmpq_init(x: *mut fmpq);
+}
+extern "C" {
+    pub fn fmpq_clear(x: *mut fmpq);
+}
+extern "C" {
+    pub fn fmpq_zero(res: *mut fmpq);
+}
+extern "C" {
+    pub fn fmpq_one(res: *mut fmpq);
+}
+extern "C" {
+    pub fn fmpq_equal(x: *mut fmpq, y: *mut fmpq) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn fmpq_sgn(x: *mut fmpq) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn fmpq_is_zero(x: *mut fmpq) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn fmpq_is_one(x: *mut fmpq) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn fmpq_is_pm1(x: *mut fmpq) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn fmpq_set(dest: *mut fmpq, src: *mut fmpq);
+}
+extern "C" {
+    pub fn fmpq_swap(op1: *mut fmpq, op2: *mut fmpq);
+}
+extern "C" {
+    pub fn fmpq_neg(dest: *mut fmpq, src: *mut fmpq);
+}
+extern "C" {
+    pub fn fmpq_abs(dest: *mut fmpq, src: *mut fmpq);
+}
+extern "C" {
     pub fn _fmpq_cmp(
         p: *mut fmpz,
         q: *mut fmpz,
@@ -14411,6 +14451,12 @@ extern "C" {
     pub fn fmpq_set_si(res: *mut fmpq, p: mp_limb_signed_t, q: mp_limb_t);
 }
 extern "C" {
+    pub fn fmpq_equal_ui(q: *mut fmpq, n: mp_limb_signed_t) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn fmpq_equal_si(q: *mut fmpq, n: mp_limb_signed_t) -> ::std::os::raw::c_int;
+}
+extern "C" {
     pub fn fmpq_set_fmpz_frac(res: *mut fmpq, p: *mut fmpz, q: *mut fmpz);
 }
 extern "C" {
@@ -14419,6 +14465,12 @@ extern "C" {
         str: *const ::std::os::raw::c_char,
         base: ::std::os::raw::c_int,
     ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn fmpq_set_mpq(dest: *mut fmpq, src: *mut __mpq_struct);
+}
+extern "C" {
+    pub fn fmpq_get_mpq(dest: *mut __mpq_struct, src: *mut fmpq);
 }
 extern "C" {
     pub fn fmpq_get_d(a: *mut fmpq) -> f64;
@@ -14472,6 +14524,12 @@ extern "C" {
 }
 extern "C" {
     pub fn fmpq_fprint(file: *mut FILE, x: *mut fmpq) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn _fmpq_print(num: *mut fmpz, den: *mut fmpz) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn fmpq_print(x: *mut fmpq) -> ::std::os::raw::c_int;
 }
 extern "C" {
     pub fn _fmpq_randtest(
@@ -14716,6 +14774,19 @@ extern "C" {
     pub fn fmpq_mod_fmpz(res: *mut fmpz, x: *mut fmpq, mod_: *mut fmpz) -> ::std::os::raw::c_int;
 }
 extern "C" {
+    pub fn _fmpq_gcd(
+        rnum: *mut fmpz,
+        rden: *mut fmpz,
+        p: *mut fmpz,
+        q: *mut fmpz,
+        r: *mut fmpz,
+        s: *mut fmpz,
+    );
+}
+extern "C" {
+    pub fn fmpq_gcd(res: *mut fmpq, op1: *mut fmpq, op2: *mut fmpq);
+}
+extern "C" {
     pub fn _fmpq_reconstruct_fmpz(
         num: *mut fmpz,
         den: *mut fmpz,
@@ -14852,6 +14923,10 @@ extern "C" {
 extern "C" {
     pub fn _fmpq_vec_init(len: mp_limb_signed_t) -> *mut fmpq;
 }
+extern "C" {
+    pub fn _fmpq_vec_clear(vec: *mut fmpq, len: mp_limb_signed_t);
+}
+#[doc = " 2x2 integer matrix"]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct _fmpz_mat22_struct {
@@ -15031,6 +15106,7 @@ extern "C" {
 extern "C" {
     pub fn _fmpz_mat22_lmul_elem(M: *mut _fmpz_mat22_struct, q: *mut fmpz);
 }
+#[doc = " resizable integer vector specific to cfrac functionality"]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct _fmpq_cfrac_list_struct {
@@ -15139,6 +15215,10 @@ extern "C" {
         n: mp_limb_signed_t,
     );
 }
+extern "C" {
+    pub fn _fmpq_cfrac_list_swap(a: *mut _fmpq_cfrac_list_struct, b: *mut _fmpq_cfrac_list_struct);
+}
+#[doc = " ball for closed interval [left, right]"]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct _fmpq_ball_struct {
@@ -15217,6 +15297,9 @@ extern "C" {
 }
 extern "C" {
     pub fn _fmpq_ball_clear(x: *mut _fmpq_ball_struct);
+}
+extern "C" {
+    pub fn _fmpq_ball_swap(x: *mut _fmpq_ball_struct, y: *mut _fmpq_ball_struct);
 }
 extern "C" {
     pub fn _fmpq_ball_gt_one(x: *mut _fmpq_ball_struct) -> ::std::os::raw::c_int;
@@ -23562,6 +23645,11 @@ extern "C" {
 extern "C" {
     pub static mut signgam: ::std::os::raw::c_int;
 }
+pub const FP_NAN: _bindgen_ty_21 = 0;
+pub const FP_INFINITE: _bindgen_ty_21 = 1;
+pub const FP_ZERO: _bindgen_ty_21 = 2;
+pub const FP_SUBNORMAL: _bindgen_ty_21 = 3;
+pub const FP_NORMAL: _bindgen_ty_21 = 4;
 pub type _bindgen_ty_21 = u32;
 extern "C" {
     pub fn d_randtest(state: *mut flint_rand_s) -> f64;
@@ -30179,6 +30267,9 @@ extern "C" {
     );
 }
 extern "C" {
+    pub fn nf_elem_canonicalise(a: *mut nf_elem_struct, nf: *mut nf_struct);
+}
+extern "C" {
     pub fn _nf_elem_reduce(a: *mut nf_elem_struct, nf: *mut nf_struct);
 }
 extern "C" {
@@ -30206,11 +30297,91 @@ extern "C" {
     ) -> ::std::os::raw::c_int;
 }
 extern "C" {
+    pub fn nf_elem_is_zero(a: *mut nf_elem_struct, nf: *mut nf_struct) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn nf_elem_is_one(a: *mut nf_elem_struct, nf: *mut nf_struct) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn nf_elem_is_gen(a: *mut nf_elem_struct, nf: *mut nf_struct) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn nf_elem_is_integer(a: *mut nf_elem_struct, nf: *mut nf_struct) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn nf_elem_is_rational(a: *mut nf_elem_struct, nf: *mut nf_struct)
+        -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn nf_elem_equal_si(
+        a: *mut nf_elem_struct,
+        b: mp_limb_signed_t,
+        nf: *mut nf_struct,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn nf_elem_equal_ui(
+        a: *mut nf_elem_struct,
+        b: mp_limb_t,
+        nf: *mut nf_struct,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn nf_elem_equal_fmpz(
+        a: *mut nf_elem_struct,
+        b: *mut fmpz,
+        nf: *mut nf_struct,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn nf_elem_equal_fmpq(
+        a: *mut nf_elem_struct,
+        b: *mut fmpq,
+        nf: *mut nf_struct,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
     #[doc = "I/O"]
     pub fn nf_elem_print_pretty(
         a: *mut nf_elem_struct,
         nf: *mut nf_struct,
         var: *const ::std::os::raw::c_char,
+    );
+}
+extern "C" {
+    pub fn nf_elem_get_str_pretty(
+        a: *mut nf_elem_struct,
+        var: *const ::std::os::raw::c_char,
+        nf: *mut nf_struct,
+    ) -> *mut ::std::os::raw::c_char;
+}
+extern "C" {
+    #[doc = "Element creation"]
+    pub fn nf_elem_zero(a: *mut nf_elem_struct, nf: *mut nf_struct);
+}
+extern "C" {
+    pub fn nf_elem_one(a: *mut nf_elem_struct, nf: *mut nf_struct);
+}
+extern "C" {
+    pub fn nf_elem_gen(a: *mut nf_elem_struct, nf: *mut nf_struct);
+}
+extern "C" {
+    pub fn nf_elem_set_si(a: *mut nf_elem_struct, c: mp_limb_signed_t, nf: *mut nf_struct);
+}
+extern "C" {
+    pub fn nf_elem_set_ui(a: *mut nf_elem_struct, c: mp_limb_t, nf: *mut nf_struct);
+}
+extern "C" {
+    pub fn nf_elem_set_fmpz(a: *mut nf_elem_struct, c: *mut fmpz, nf: *mut nf_struct);
+}
+extern "C" {
+    pub fn nf_elem_set_fmpq(a: *mut nf_elem_struct, c: *mut fmpq, nf: *mut nf_struct);
+}
+extern "C" {
+    pub fn nf_elem_set_fmpq_poly(
+        a: *mut nf_elem_struct,
+        pol: *mut fmpq_poly_struct,
+        nf: *mut nf_struct,
     );
 }
 extern "C" {
@@ -30229,6 +30400,13 @@ extern "C" {
         i: mp_limb_signed_t,
         den: *mut fmpz,
         b: *mut nf_elem_struct,
+        nf: *mut nf_struct,
+    );
+}
+extern "C" {
+    pub fn nf_elem_get_fmpq_poly(
+        pol: *mut fmpq_poly_struct,
+        a: *mut nf_elem_struct,
         nf: *mut nf_struct,
     );
 }
@@ -30275,6 +30453,50 @@ extern "C" {
         a: *mut nf_elem_struct,
         nf: *mut nf_struct,
     );
+}
+extern "C" {
+    #[doc = "Basic manipulation"]
+    pub fn nf_elem_get_den(d: *mut fmpz, b: *mut nf_elem_struct, nf: *mut nf_struct);
+}
+extern "C" {
+    pub fn nf_elem_set_den(b: *mut nf_elem_struct, d: *mut fmpz, nf: *mut nf_struct);
+}
+extern "C" {
+    pub fn nf_elem_get_coeff_fmpq(
+        a: *mut fmpq,
+        b: *mut nf_elem_struct,
+        i: mp_limb_signed_t,
+        nf: *mut nf_struct,
+    );
+}
+extern "C" {
+    pub fn nf_elem_get_coeff_fmpz(
+        a: *mut fmpz,
+        b: *mut nf_elem_struct,
+        i: mp_limb_signed_t,
+        nf: *mut nf_struct,
+    );
+}
+extern "C" {
+    pub fn nf_elem_den_is_one(a: *mut nf_elem_struct, nf: *mut nf_struct) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn _nf_elem_set_coeff_num_fmpz(
+        a: *mut nf_elem_struct,
+        i: mp_limb_signed_t,
+        b: *mut fmpz,
+        nf: *mut nf_struct,
+    );
+}
+extern "C" {
+    #[doc = "Arithmetic"]
+    pub fn nf_elem_set(a: *mut nf_elem_struct, b: *mut nf_elem_struct, nf: *mut nf_struct);
+}
+extern "C" {
+    pub fn nf_elem_neg(a: *mut nf_elem_struct, b: *mut nf_elem_struct, nf: *mut nf_struct);
+}
+extern "C" {
+    pub fn nf_elem_swap(a: *mut nf_elem_struct, b: *mut nf_elem_struct, nf: *mut nf_struct);
 }
 extern "C" {
     pub fn nf_elem_add_si(
@@ -30447,6 +30669,41 @@ extern "C" {
         c: *mut nf_elem_struct,
         nf: *mut nf_struct,
     );
+}
+extern "C" {
+    pub fn _nf_elem_add(
+        a: *mut nf_elem_struct,
+        b: *mut nf_elem_struct,
+        c: *mut nf_elem_struct,
+        nf: *mut nf_struct,
+    );
+}
+extern "C" {
+    pub fn _nf_elem_sub(
+        a: *mut nf_elem_struct,
+        b: *mut nf_elem_struct,
+        c: *mut nf_elem_struct,
+        nf: *mut nf_struct,
+    );
+}
+extern "C" {
+    pub fn nf_elem_add(
+        a: *mut nf_elem_struct,
+        b: *mut nf_elem_struct,
+        c: *mut nf_elem_struct,
+        nf: *mut nf_struct,
+    );
+}
+extern "C" {
+    pub fn nf_elem_sub(
+        a: *mut nf_elem_struct,
+        b: *mut nf_elem_struct,
+        c: *mut nf_elem_struct,
+        nf: *mut nf_struct,
+    );
+}
+extern "C" {
+    pub fn nf_elem_mul_gen(a: *mut nf_elem_struct, b: *mut nf_elem_struct, nf: *mut nf_struct);
 }
 extern "C" {
     pub fn _nf_elem_mul(
@@ -30629,23 +30886,6 @@ extern "C" {
         res: *mut nf_elem_struct,
         a: *mut nf_elem_struct,
         mod_: *mut fmpz,
-        nf: *mut nf_struct,
-    );
-}
-extern "C" {
-    pub fn fmpq_init(q: *mut fmpq);
-}
-extern "C" {
-    pub fn nf_elem_add(
-        a: *mut nf_elem_struct,
-        b: *mut nf_elem_struct,
-        c: *mut nf_elem_struct,
-        nf: *mut nf_struct,
-    );
-    pub fn nf_elem_set(a: *mut nf_elem_struct, b: *mut nf_elem_struct, nf: *mut nf_struct);
-    pub fn nf_elem_set_fmpq_poly(
-        a: *mut nf_elem_struct,
-        b: *mut fmpq_poly_struct,
         nf: *mut nf_struct,
     );
 }
