@@ -1,6 +1,6 @@
 [package]
 name = "antic"
-description = "wrapper for the antic C library for algebraic number theory"
+description = "bindings for the antic C library for algebraic number theory"
 version = "0.1.0"
 authors = ["Kaashif Hymabaccus <kaashif@kaashif.co.uk>"]
 license = "LGPL-3.0-only"
