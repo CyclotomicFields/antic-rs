@@ -25104,6 +25104,12 @@ extern "C" {
     pub fn _fmpq_poly_normalise(poly: *mut fmpq_poly_struct);
 }
 extern "C" {
+    pub fn fmpq_poly_get_numerator(res: *mut fmpz_poly_struct, poly: *mut fmpq_poly_struct);
+}
+extern "C" {
+    pub fn fmpq_poly_get_denominator(den: *mut fmpz, poly: *mut fmpq_poly_struct);
+}
+extern "C" {
     pub fn _fmpq_poly_canonicalise(rpoly: *mut fmpz, den: *mut fmpz, len: mp_limb_signed_t);
 }
 extern "C" {
@@ -25118,6 +25124,12 @@ extern "C" {
 }
 extern "C" {
     pub fn fmpq_poly_is_canonical(poly: *mut fmpq_poly_struct) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn fmpq_poly_degree(poly: *mut fmpq_poly_struct) -> mp_limb_signed_t;
+}
+extern "C" {
+    pub fn fmpq_poly_length(poly: *mut fmpq_poly_struct) -> mp_limb_signed_t;
 }
 extern "C" {
     pub fn fmpq_poly_randtest(
@@ -25233,6 +25245,9 @@ extern "C" {
     pub fn fmpq_poly_zero(poly: *mut fmpq_poly_struct);
 }
 extern "C" {
+    pub fn fmpq_poly_one(poly: *mut fmpq_poly_struct);
+}
+extern "C" {
     pub fn fmpq_poly_neg(poly1: *mut fmpq_poly_struct, poly2: *mut fmpq_poly_struct);
 }
 extern "C" {
@@ -25240,6 +25255,9 @@ extern "C" {
 }
 extern "C" {
     pub fn fmpq_poly_swap(poly1: *mut fmpq_poly_struct, poly2: *mut fmpq_poly_struct);
+}
+extern "C" {
+    pub fn fmpq_poly_truncate(poly: *mut fmpq_poly_struct, n: mp_limb_signed_t);
 }
 extern "C" {
     pub fn fmpq_poly_set_trunc(
@@ -25344,6 +25362,15 @@ extern "C" {
         poly2: *mut fmpq_poly_struct,
         n: mp_limb_signed_t,
     ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn fmpq_poly_is_zero(poly: *mut fmpq_poly_struct) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn fmpq_poly_is_one(poly: *mut fmpq_poly_struct) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn fmpq_poly_is_gen(op: *mut fmpq_poly_struct) -> ::std::os::raw::c_int;
 }
 extern "C" {
     pub fn fmpq_poly_add_si(
@@ -25783,6 +25810,20 @@ extern "C" {
     );
 }
 extern "C" {
+    pub fn fmpq_poly_addmul(
+        rop: *mut fmpq_poly_struct,
+        op1: *mut fmpq_poly_struct,
+        op2: *mut fmpq_poly_struct,
+    );
+}
+extern "C" {
+    pub fn fmpq_poly_submul(
+        rop: *mut fmpq_poly_struct,
+        op1: *mut fmpq_poly_struct,
+        op2: *mut fmpq_poly_struct,
+    );
+}
+extern "C" {
     pub fn _fmpq_poly_pow(
         rpoly: *mut fmpz,
         rden: *mut fmpz,
@@ -25967,6 +26008,23 @@ extern "C" {
 }
 extern "C" {
     pub fn fmpq_poly_inv_series_newton(
+        Qinv: *mut fmpq_poly_struct,
+        Q: *mut fmpq_poly_struct,
+        n: mp_limb_signed_t,
+    );
+}
+extern "C" {
+    pub fn _fmpq_poly_inv_series(
+        Qinv: *mut fmpz,
+        Qinvden: *mut fmpz,
+        Q: *const fmpz,
+        Qden: *mut fmpz,
+        Qlen: mp_limb_signed_t,
+        n: mp_limb_signed_t,
+    );
+}
+extern "C" {
+    pub fn fmpq_poly_inv_series(
         Qinv: *mut fmpq_poly_struct,
         Q: *mut fmpq_poly_struct,
         n: mp_limb_signed_t,
@@ -26721,7 +26779,34 @@ extern "C" {
     ) -> ::std::os::raw::c_int;
 }
 extern "C" {
+    pub fn _fmpq_poly_print(
+        poly: *const fmpz,
+        den: *mut fmpz,
+        len: mp_limb_signed_t,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn fmpq_poly_print(poly: *mut fmpq_poly_struct) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn _fmpq_poly_print_pretty(
+        poly: *const fmpz,
+        den: *mut fmpz,
+        len: mp_limb_signed_t,
+        x: *const ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn fmpq_poly_print_pretty(
+        poly: *mut fmpq_poly_struct,
+        var: *const ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
     pub fn fmpq_poly_fread(file: *mut FILE, poly: *mut fmpq_poly_struct) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn fmpq_poly_read(poly: *mut fmpq_poly_struct) -> ::std::os::raw::c_int;
 }
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]

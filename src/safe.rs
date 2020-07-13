@@ -68,9 +68,8 @@ impl Drop for RationalPolynomial {
     }
 }
 
-// TODO: make raw private
 pub struct NumberField<'a> {
-    pub raw: MaybeUninit<nf_struct>,
+    raw: MaybeUninit<nf_struct>,
     polynomial: &'a mut RationalPolynomial,
 }
 
@@ -96,57 +95,80 @@ impl Drop for NumberField<'_> {
     }
 }
 
-// TODO: make raw private (fully convert code that uses this)
-pub struct NumberFieldElement<'a, 'b> {
-    pub raw: MaybeUninit<nf_elem_struct>,
-    field: &'a mut NumberField<'b>,
+#[derive(Clone)]
+pub struct NumberFieldElement {
+    raw: MaybeUninit<nf_elem_struct>,
 }
 
-impl<'a, 'b> NumberFieldElement<'a, 'b> {
-    pub fn new(field: &'a mut NumberField<'b>) -> Self {
+impl NumberFieldElement {
+    pub fn new(field: &mut NumberField) -> Self {
         let mut raw = MaybeUninit::uninit();
         unsafe {
             nf_elem_init(raw.as_mut_ptr(), field.raw.as_mut_ptr());
         }
-        NumberFieldElement {
-            raw: raw,
-            field: field,
-        }
+        NumberFieldElement { raw: raw }
     }
-    pub fn set_to_poly(&mut self, poly: &mut RationalPolynomial) {
+    pub fn set_to_poly(&mut self, poly: &mut RationalPolynomial, field: &mut NumberField) {
         unsafe {
             nf_elem_set_fmpq_poly(
                 self.raw.as_mut_ptr(),
                 poly.raw.as_mut_ptr(),
-                self.field.raw.as_mut_ptr(),
+                field.raw.as_mut_ptr(),
             );
         }
     }
-    pub fn set(&mut self, other: &mut NumberFieldElement) {
+    pub fn set(&mut self, other: &mut NumberFieldElement, field: &mut NumberField) {
         unsafe {
             nf_elem_set(
                 self.raw.as_mut_ptr(),
                 other.raw.as_mut_ptr(),
-                self.field.raw.as_mut_ptr(),
+                field.raw.as_mut_ptr(),
             );
         }
     }
-    pub fn set_to_sum_of(&mut self, a: &mut NumberFieldElement, b: &mut NumberFieldElement) {
+    pub fn set_to_sum_of(
+        &mut self,
+        a: &mut NumberFieldElement,
+        b: &mut NumberFieldElement,
+        field: &mut NumberField,
+    ) {
         unsafe {
             nf_elem_add(
                 self.raw.as_mut_ptr(),
                 a.raw.as_mut_ptr(),
                 b.raw.as_mut_ptr(),
-                self.field.raw.as_mut_ptr(),
+                field.raw.as_mut_ptr(),
+            );
+        }
+    }
+    pub fn set_to_mul_of(
+        &mut self,
+        a: &mut NumberFieldElement,
+        b: &mut NumberFieldElement,
+        field: &mut NumberField,
+    ) {
+        unsafe {
+            fmpq_poly_fit_length(
+                (*self.raw.as_mut_ptr()).elem.as_mut_ptr(),
+                fmpq_poly_degree((*a.raw.as_mut_ptr()).elem.as_mut_ptr())
+                    + fmpq_poly_degree((*b.raw.as_mut_ptr()).elem.as_mut_ptr()) + 1,
+            );
+            nf_elem_mul(
+                self.raw.as_mut_ptr(),
+                a.raw.as_mut_ptr(),
+                b.raw.as_mut_ptr(),
+                field.raw.as_mut_ptr(),
             );
         }
     }
 }
 
-impl Drop for NumberFieldElement<'_, '_> {
+impl Drop for NumberFieldElement {
     fn drop(&mut self) {
         unsafe {
-            nf_elem_clear(self.raw.as_mut_ptr(), self.field.raw.as_mut_ptr());
+            // This is what we want, but it's not possible without aliasing
+            // field, I think. TODO: work out how to do this
+            //nf_elem_clear(self.raw.as_mut_ptr(), self.field.raw.as_mut_ptr());
         }
     }
 }
